@@ -7,6 +7,8 @@ function App() {
   const [items, setItems] = useState<CatalogueItem[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [activeIndex, setActiveIndex] = useState(0);
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -37,8 +39,6 @@ function App() {
       </div>
     );
   }
-
-  const [activeIndex, setActiveIndex] = useState(0);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const scrollLeft = e.currentTarget.scrollLeft;
