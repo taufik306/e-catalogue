@@ -1,73 +1,64 @@
-# React + TypeScript + Vite
+# Modern E-Catalogue Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A mobile-first, Progressive Web App (PWA) e-catalogue built with React, Vite, and Tailwind CSS. This application is designed to display products one at a time using smooth horizontal swiping, and it fetches its data directly from a published Google Spreadsheet, eliminating the need for a traditional backend database.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Before you begin, ensure you have the following installed on your machine:
+* [Node.js](https://nodejs.org/) (Version 18 or higher recommended)
+* `npm` (usually comes with Node.js)
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Clone the repository and navigate to the project directory**
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
 
-## Expanding the ESLint configuration
+## Configuring Data (Google Sheets)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The application fetches item data (Name, Price, ImageURL) from a Google Sheet published as a CSV.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Setting up the Sheet:
+1. Create a new [Google Sheet](https://sheets.google.com).
+2. Set up three column headers in the first row: `Name`, `Price`, and `ImageURL`.
+3. Add your items into the rows below. Make sure the image URLs point to publicly accessible images (e.g., `https://example.com/image.jpg`).
+4. In Google Sheets, click **File > Share > Publish to web**.
+5. Change the format dropdown from "Web page" to **Comma-separated values (.csv)**.
+6. Click "Publish" and copy the generated link.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Linking the Sheet to the App:
+Create a `.env` file in the root directory of this project and add the copied link like so:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_SHEET_CSV_URL=https://docs.google.com/spreadsheets/d/e/.../pub?output=csv
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+*Note: If no URL is provided, the application will automatically fall back to a set of placeholder dummy data so you can test the UI immediately.*
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Running the App
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Development Mode
+To start the local development server with Hot Module Replacement:
+```bash
+npm run dev
 ```
+Navigate to `http://localhost:5173` in your browser. For the best experience, open Developer Tools and toggle the Device Toolbar to view it in mobile mode.
+
+### Production Build
+To build the app for production (including generating the PWA Service Worker):
+```bash
+npm run build
+```
+
+To preview the built production site locally:
+```bash
+npm run preview
+```
+
+## Features
+* **Modern Stack:** React 19, Vite, Tailwind CSS v3.
+* **Responsive & Mobile First:** Full-screen snap-scrolling architecture.
+* **Progressive Web App (PWA):** Offline support and caching configured via `vite-plugin-pwa`.
+* **Zero Backend:** Uses `papaparse` to read data directly from Google Sheets.
