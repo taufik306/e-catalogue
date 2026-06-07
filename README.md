@@ -10,7 +10,7 @@ Before you begin, ensure you have the following installed on your machine:
 
 ## Getting Started
 
-1. **Clone the repository and navigate to the project directory**
+1. **Clone the repository and navigate to the project directory (e.g., git clone <repository-url> && cd <repository-name>)**
 2. **Install Dependencies**
    ```bash
    npm install
