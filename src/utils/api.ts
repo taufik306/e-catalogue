@@ -28,7 +28,7 @@ const fallbackData: CatalogueItem[] = [
     id: '4',
     name: 'Linen Throw Pillow',
     price: '$45.00',
-    imageUrl: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1611489704434-2612dc89c992?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   }
 ];
 
