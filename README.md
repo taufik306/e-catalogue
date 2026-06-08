@@ -37,6 +37,21 @@ VITE_SHEET_CSV_URL=https://docs.google.com/spreadsheets/d/e/.../pub?output=csv
 
 *Note: If no URL is provided, the application will automatically fall back to a set of placeholder dummy data so you can test the UI immediately.*
 
+### Using the Sheet URL on GitHub Pages
+
+Vite reads `VITE_SHEET_CSV_URL` at build time, so GitHub Actions also needs this value when it runs `npm run build`.
+
+For GitHub Pages deployment, add a repository variable:
+
+1. Open your GitHub repository.
+2. Go to **Settings > Secrets and variables > Actions > Variables**.
+3. Create a new repository variable named `VITE_SHEET_CSV_URL`.
+4. Set its value to your published Google Sheet CSV URL.
+
+The deploy workflow passes that repository variable into the production build automatically.
+
+Because this is a frontend app, `VITE_SHEET_CSV_URL` is included in the built JavaScript and can be seen by browser users. Use a published CSV URL that is safe to expose publicly.
+
 ## Running the App
 
 ### Development Mode
