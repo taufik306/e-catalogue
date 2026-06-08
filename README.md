@@ -61,6 +61,18 @@ npm run dev
 ```
 Navigate to `http://localhost:5173` in your browser. For the best experience, open Developer Tools and toggle the Device Toolbar to view it in mobile mode.
 
+To test from a mobile phone on the same Wi-Fi network:
+
+```bash
+npm run dev:host
+```
+
+Find your computer's local network IP address, then open this URL on your phone:
+
+```text
+http://<your-computer-ip>:5173/
+```
+
 ### Production Build
 To build the app for production (including generating the PWA Service Worker):
 ```bash
