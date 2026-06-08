@@ -1,0 +1,16 @@
+ID,ParentID,Name,Price,ImageURL,SortOrder,Active
+chair,,Modern Accent Chair,$299.00,https://images.unsplash.com/photo-1592078615290-033ee584e267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,1,TRUE
+chair-fabric,chair,Fabric Accent Chair,$299.00,https://images.unsplash.com/photo-1586158291800-2665f07bba79?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,1,TRUE
+chair-fabric-blue,chair-fabric,Blue Fabric Accent Chair,$319.00,https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,1,TRUE
+chair-fabric-blue-velvet,chair-fabric-blue,Blue Velvet Accent Chair,$339.00,https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,1,TRUE
+chair-fabric-green,chair-fabric,Green Fabric Accent Chair,$329.00,https://images.unsplash.com/photo-1540574163026-643ea20ade25?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,2,TRUE
+chair-leather,chair,Leather Accent Chair,$349.00,https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,2,TRUE
+chair-leather-black,chair-leather,Black Leather Accent Chair,$369.00,https://images.unsplash.com/photo-1567016432779-094069958ea5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,1,TRUE
+chair-leather-black-premium,chair-leather-black,Premium Black Leather Accent Chair,$399.00,https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,1,TRUE
+table,,Minimalist Wood Table,$450.00,https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,2,TRUE
+table-small,table,Small Wood Table,$350.00,https://images.unsplash.com/photo-1533090368676-1fd25485db88?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,1,TRUE
+table-large,table,Large Wood Table,$550.00,https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,2,TRUE
+lamp,,Ceramic Table Lamp,$85.00,https://images.unsplash.com/photo-1507473885765-e6ed057f782c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,3,TRUE
+lamp-warm,lamp,Warm Light Ceramic Lamp,$95.00,https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,1,TRUE
+archived-collection,,Archived Collection,$0.00,https://images.unsplash.com/photo-1618220179428-22790b461013?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,4,FALSE
+archived-collection-item,archived-collection,Hidden Archived Item,$0.00,https://images.unsplash.com/photo-1611486212557-88be5ff6f941?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80,1,TRUE

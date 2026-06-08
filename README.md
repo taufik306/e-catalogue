@@ -18,15 +18,29 @@ Before you begin, ensure you have the following installed on your machine:
 
 ## Configuring Data (Google Sheets)
 
-The application fetches item data (Name, Price, ImageURL) from a Google Sheet published as a CSV.
+The application fetches hierarchical catalogue data from a Google Sheet published as a CSV.
 
 ### Setting up the Sheet:
 1. Create a new [Google Sheet](https://sheets.google.com).
-2. Set up three column headers in the first row: `Name`, `Price`, and `ImageURL`.
-3. Add your items into the rows below. Make sure the image URLs point to publicly accessible images (e.g., `https://example.com/image.jpg`).
+2. Set up these column headers in the first row: `ID`, `ParentID`, `Name`, `Price`, `ImageURL`, `SortOrder`, and `Active`.
+3. Add your items into the rows below. Make sure each `ID` is unique and stable, and make sure the image URLs point to publicly accessible images (e.g., `https://example.com/image.jpg`).
 4. In Google Sheets, click **File > Share > Publish to web**.
 5. Change the format dropdown from "Web page" to **Comma-separated values (.csv)**.
 6. Click "Publish" and copy the generated link.
+
+Example CSV:
+
+```csv
+ID,ParentID,Name,Price,ImageURL,SortOrder,Active
+chair,,Modern Accent Chair,$299,https://example.com/chair.jpg,1,TRUE
+chair-fabric,chair,Fabric Accent Chair,$299,https://example.com/chair-fabric.jpg,1,TRUE
+chair-fabric-blue,chair-fabric,Blue Fabric Accent Chair,$319,https://example.com/chair-blue.jpg,1,TRUE
+table,,Minimalist Wood Table,$450,https://example.com/table.jpg,2,TRUE
+```
+
+Rows with an empty `ParentID` are top-level catalogue items. Rows with `ParentID` become children of the row whose `ID` matches, so the catalogue can have as many nested levels as needed. If `Active` is `FALSE`, that item and all of its children are hidden. Empty `Active` values default to visible.
+
+A complete sample CSV is available at `docs/sample-catalogue.csv`.
 
 ### Linking the Sheet to the App:
 Create a `.env` file in the root directory of this project and add the copied link like so:
