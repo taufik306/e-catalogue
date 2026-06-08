@@ -5,7 +5,7 @@ A mobile-first, Progressive Web App (PWA) e-catalogue built with React, Vite, an
 ## Prerequisites
 
 Before you begin, ensure you have the following installed on your machine:
-* [Node.js](https://nodejs.org/) (Version 18 or higher recommended)
+* [Node.js](https://nodejs.org/) (minimum: 20.19.0; 22.12.0 or newer recommended)
 * `npm` (usually comes with Node.js)
 
 ## Getting Started
