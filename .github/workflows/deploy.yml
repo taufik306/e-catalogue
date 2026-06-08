@@ -39,6 +39,7 @@ jobs:
         run: npm run build
         env:
           BASE_PATH: /e-catalogue/
+          VITE_SHEET_CSV_URL: ${{ vars.VITE_SHEET_CSV_URL }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
