@@ -1,21 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { CatalogueNode } from './types';
 import { fetchCatalogueData } from './utils/api';
 import { CatalogueCard } from './components/CatalogueCard';
 
+interface CatalogueLevel {
+  items: CatalogueNode[];
+  activeIndex: number;
+}
+
 function App() {
-  const [navigationStack, setNavigationStack] = useState<CatalogueNode[][]>([]);
+  const [navigationStack, setNavigationStack] = useState<CatalogueLevel[]>([]);
   const [loading, setLoading] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const pendingScrollIndexRef = useRef(0);
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const currentItems = navigationStack[navigationStack.length - 1] || [];
+  const currentLevel = navigationStack[navigationStack.length - 1];
+  const currentItems = currentLevel?.items || [];
+  const activeIndex = currentLevel?.activeIndex || 0;
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const data = await fetchCatalogueData();
-        setNavigationStack([data]);
+        pendingScrollIndexRef.current = 0;
+        setNavigationStack([{ items: data, activeIndex: 0 }]);
       } catch (error) {
         console.error("Failed to load catalogue", error);
       } finally {
@@ -26,9 +34,10 @@ function App() {
     loadData();
   }, []);
 
-  useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollLeft = 0;
+  useLayoutEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (scrollContainer) {
+      scrollContainer.scrollLeft = pendingScrollIndexRef.current * scrollContainer.offsetWidth;
     }
   }, [navigationStack.length]);
 
@@ -51,24 +60,47 @@ function App() {
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const scrollLeft = e.currentTarget.scrollLeft;
     const width = e.currentTarget.offsetWidth;
-    const newIndex = Math.round(scrollLeft / width);
+    if (width === 0) {
+      return;
+    }
+
+    const lastIndex = Math.max(currentItems.length - 1, 0);
+    const newIndex = Math.min(Math.max(Math.round(scrollLeft / width), 0), lastIndex);
     if (newIndex !== activeIndex) {
-      setActiveIndex(newIndex);
+      setNavigationStack((stack) => stack.map((level, index) => (
+        index === stack.length - 1
+          ? { ...level, activeIndex: newIndex }
+          : level
+      )));
     }
   };
 
-  const handleItemClick = (item: CatalogueNode) => {
+  const handleItemClick = (item: CatalogueNode, itemIndex: number) => {
     if (item.children.length === 0) {
       return;
     }
 
-    setNavigationStack((stack) => [...stack, item.children]);
-    setActiveIndex(0);
+    pendingScrollIndexRef.current = 0;
+    setNavigationStack((stack) => [
+      ...stack.map((level, index) => (
+        index === stack.length - 1
+          ? { ...level, activeIndex: itemIndex }
+          : level
+      )),
+      { items: item.children, activeIndex: 0 },
+    ]);
   };
 
   const handleBack = () => {
-    setNavigationStack((stack) => stack.length > 1 ? stack.slice(0, -1) : stack);
-    setActiveIndex(0);
+    setNavigationStack((stack) => {
+      if (stack.length <= 1) {
+        return stack;
+      }
+
+      const nextStack = stack.slice(0, -1);
+      pendingScrollIndexRef.current = nextStack[nextStack.length - 1]?.activeIndex || 0;
+      return nextStack;
+    });
   };
 
   return (
@@ -76,25 +108,39 @@ function App() {
       {navigationStack.length > 1 && (
         <button
           type="button"
-          className="absolute top-4 left-4 z-10 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-gray-700 shadow-md backdrop-blur transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="absolute top-4 left-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-md backdrop-blur transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           onClick={handleBack}
+          aria-label="Go back"
+          title="Go back"
         >
-          Back
+          <svg
+            aria-hidden="true"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M19 12H5" />
+            <path d="M12 19l-7-7 7-7" />
+          </svg>
         </button>
       )}
 
       {/* Horizontal Scroll Container */}
       <div
         ref={scrollContainerRef}
-        className="w-full h-full flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth hide-scrollbar"
+        className="catalogue-scroller w-full h-full flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth hide-scrollbar"
         onScroll={handleScroll}
       >
-        {currentItems.map((item) => (
+        {currentItems.map((item, index) => (
           <CatalogueCard
             key={item.id}
             item={item}
             hasChildren={item.children.length > 0}
-            onClick={() => handleItemClick(item)}
+            onClick={() => handleItemClick(item, index)}
           />
         ))}
       </div>
