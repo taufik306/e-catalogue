@@ -67,11 +67,7 @@ To test from a mobile phone on the same Wi-Fi network:
 npm run dev:host
 ```
 
-Find your computer's local network IP address, then open this URL on your phone:
-
-```text
-http://<your-computer-ip>:5173/
-```
+Open the Network URL displayed in your terminal on your mobile phone (for example, http://192.168.1.100:5173/).
 
 ### Production Build
 To build the app for production (including generating the PWA Service Worker):
