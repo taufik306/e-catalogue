@@ -26,7 +26,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="w-screen h-screen flex items-center justify-center bg-gray-50">
+      <div className="app-viewport w-screen flex items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
       </div>
     );
@@ -34,7 +34,7 @@ function App() {
 
   if (items.length === 0) {
     return (
-      <div className="w-screen h-screen flex items-center justify-center bg-gray-50 text-gray-600 text-xl">
+      <div className="app-viewport w-screen flex items-center justify-center bg-gray-50 text-gray-600 text-xl">
         No items found in catalogue.
       </div>
     );
@@ -50,7 +50,7 @@ function App() {
   };
 
   return (
-    <div className="w-screen h-screen bg-gray-50 overflow-hidden relative">
+    <div className="app-viewport w-screen bg-gray-50 overflow-hidden relative">
       {/* Horizontal Scroll Container */}
       <div
         className="w-full h-full flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth hide-scrollbar"
@@ -62,7 +62,7 @@ function App() {
       </div>
 
       {/* Pagination indicators (Dots) */}
-      <div className="absolute bottom-6 left-0 right-0 flex justify-center space-x-2 pointer-events-none">
+      <div className="pagination-dots absolute left-0 right-0 flex justify-center space-x-2 pointer-events-none">
         {items.map((_, idx) => (
           <div
             key={idx}
