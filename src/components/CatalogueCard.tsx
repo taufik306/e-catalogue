@@ -10,7 +10,7 @@ interface CatalogueCardProps {
 export const CatalogueCard: React.FC<CatalogueCardProps> = ({ item, hasChildren = false, onClick }) => {
   const cardContent = (
     <>
-      <div className="relative flex-1 min-h-0 w-full bg-gray-100 flex items-center justify-center overflow-hidden">
+      <div className="catalogue-card-media relative flex-1 min-h-0 w-full bg-gray-100 flex items-center justify-center overflow-hidden">
         {item.imageUrl ? (
           <img
             src={item.imageUrl}
@@ -25,7 +25,7 @@ export const CatalogueCard: React.FC<CatalogueCardProps> = ({ item, hasChildren 
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10"></div>
       </div>
 
-      <div className="shrink-0 p-5 sm:p-8 bg-white flex flex-col items-center text-center">
+      <div className="catalogue-card-content shrink-0 p-5 sm:p-8 bg-white flex flex-col items-center text-center">
         <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 leading-tight">
           {item.name}
         </h2>
@@ -33,7 +33,7 @@ export const CatalogueCard: React.FC<CatalogueCardProps> = ({ item, hasChildren 
           {item.price}
         </p>
         {hasChildren && (
-          <div className="mt-4 rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700">
+          <div className="catalogue-card-action mt-4 rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700">
             View options
           </div>
         )}
