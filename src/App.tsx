@@ -8,11 +8,18 @@ interface CatalogueLevel {
   activeIndex: number;
 }
 
+type LevelAnimation = 'idle' | 'enter-from-bottom' | 'exit-to-bottom' | 'enter-from-top';
+
+const LEVEL_ENTER_ANIMATION_MS = 320;
+const LEVEL_EXIT_ANIMATION_MS = 260;
+
 function App() {
   const [navigationStack, setNavigationStack] = useState<CatalogueLevel[]>([]);
+  const [levelAnimation, setLevelAnimation] = useState<LevelAnimation>('idle');
   const [loading, setLoading] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const pendingScrollIndexRef = useRef(0);
+  const levelAnimationTimeoutRef = useRef<number | null>(null);
 
   const currentLevel = navigationStack[navigationStack.length - 1];
   const currentItems = currentLevel?.items || [];
@@ -34,12 +41,36 @@ function App() {
     loadData();
   }, []);
 
+  useEffect(() => () => {
+    if (levelAnimationTimeoutRef.current) {
+      window.clearTimeout(levelAnimationTimeoutRef.current);
+    }
+  }, []);
+
   useLayoutEffect(() => {
     const scrollContainer = scrollContainerRef.current;
     if (scrollContainer) {
       scrollContainer.scrollLeft = pendingScrollIndexRef.current * scrollContainer.offsetWidth;
     }
   }, [navigationStack.length]);
+
+  const playLevelEnterAnimation = (direction: Extract<LevelAnimation, 'enter-from-bottom' | 'enter-from-top'>) => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (levelAnimationTimeoutRef.current) {
+      window.clearTimeout(levelAnimationTimeoutRef.current);
+    }
+
+    if (prefersReducedMotion) {
+      setLevelAnimation('idle');
+      return;
+    }
+
+    setLevelAnimation(direction);
+    levelAnimationTimeoutRef.current = window.setTimeout(() => {
+      setLevelAnimation('idle');
+    }, LEVEL_ENTER_ANIMATION_MS);
+  };
 
   if (loading) {
     return (
@@ -81,6 +112,7 @@ function App() {
     }
 
     pendingScrollIndexRef.current = 0;
+    playLevelEnterAnimation('enter-from-bottom');
     setNavigationStack((stack) => [
       ...stack.map((level, index) => (
         index === stack.length - 1
@@ -92,16 +124,47 @@ function App() {
   };
 
   const handleBack = () => {
-    setNavigationStack((stack) => {
-      if (stack.length <= 1) {
-        return stack;
-      }
+    if (navigationStack.length <= 1 || levelAnimation !== 'idle') {
+      return;
+    }
 
-      const nextStack = stack.slice(0, -1);
-      pendingScrollIndexRef.current = nextStack[nextStack.length - 1]?.activeIndex || 0;
-      return nextStack;
-    });
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const navigateBack = () => {
+      setNavigationStack((stack) => {
+        if (stack.length <= 1) {
+          return stack;
+        }
+
+        const nextStack = stack.slice(0, -1);
+        pendingScrollIndexRef.current = nextStack[nextStack.length - 1]?.activeIndex || 0;
+        return nextStack;
+      });
+    };
+
+    if (levelAnimationTimeoutRef.current) {
+      window.clearTimeout(levelAnimationTimeoutRef.current);
+    }
+
+    if (prefersReducedMotion) {
+      navigateBack();
+      setLevelAnimation('idle');
+      return;
+    }
+
+    setLevelAnimation('exit-to-bottom');
+    levelAnimationTimeoutRef.current = window.setTimeout(() => {
+      navigateBack();
+      playLevelEnterAnimation('enter-from-top');
+    }, LEVEL_EXIT_ANIMATION_MS);
   };
+
+  const scrollerAnimationClass = {
+    idle: '',
+    'enter-from-bottom': 'catalogue-scroller-enter-from-bottom',
+    'exit-to-bottom': 'catalogue-scroller-exit-to-bottom',
+    'enter-from-top': 'catalogue-scroller-enter-from-top',
+  }[levelAnimation];
 
   return (
     <div className="app-viewport w-screen bg-gray-50 overflow-hidden relative">
@@ -110,6 +173,7 @@ function App() {
           type="button"
           className="absolute top-4 left-4 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-md backdrop-blur transition hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           onClick={handleBack}
+          disabled={levelAnimation !== 'idle'}
           aria-label="Go back"
           title="Go back"
         >
@@ -132,7 +196,7 @@ function App() {
       {/* Horizontal Scroll Container */}
       <div
         ref={scrollContainerRef}
-        className="catalogue-scroller w-full h-full flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth hide-scrollbar"
+        className={`catalogue-scroller ${scrollerAnimationClass} w-full h-full flex overflow-x-auto overflow-y-hidden snap-x snap-mandatory scroll-smooth hide-scrollbar`}
         onScroll={handleScroll}
       >
         {currentItems.map((item, index) => (

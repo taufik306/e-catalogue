@@ -34,7 +34,7 @@ export const CatalogueCard: React.FC<CatalogueCardProps> = ({ item, hasChildren 
         </p>
         {hasChildren && (
           <div className="catalogue-card-action mt-4 rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700">
-            View options
+            View details
           </div>
         )}
       </div>
@@ -46,7 +46,7 @@ export const CatalogueCard: React.FC<CatalogueCardProps> = ({ item, hasChildren 
       {hasChildren ? (
         <button
           type="button"
-          className="catalogue-card flex min-h-0 flex-col bg-white rounded-3xl shadow-xl overflow-hidden text-left transform transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-200"
+          className="catalogue-card flex min-h-0 flex-col bg-white rounded-3xl shadow-xl overflow-hidden text-left focus:outline-none focus:ring-4 focus:ring-blue-200"
           onClick={onClick}
           aria-label={`View options for ${item.name}`}
         >
